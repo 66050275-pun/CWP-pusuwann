@@ -10,3 +10,7 @@ else:
         print(list(range(start, end + 1)))
     else:
         print(list(range(start, end - 1, -1)))
+
+# Example test commands in terminal:
+# ./free_range.py
+# ./free_range.py 10 14

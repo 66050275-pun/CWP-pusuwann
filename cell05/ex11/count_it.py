@@ -8,3 +8,7 @@ else:
     print(f"parameters: {len(params)}")
     for p in params:
         print(f"{p}: {len(p)}")
+
+# Example test commands in terminal:
+# ./count_it.py
+# ./count_it.py "Game" "of" "Thrones"

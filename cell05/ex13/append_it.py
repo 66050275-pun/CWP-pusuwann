@@ -7,3 +7,7 @@ else:
     for param in sys.argv[1:]:
         if not param.endswith("ism"):
             print(f"{param}ism")
+
+# Example test commands in terminal:
+# ./append_it.py
+# ./append_it.py "parallel" "egoism" "human"

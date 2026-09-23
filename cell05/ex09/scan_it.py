@@ -10,3 +10,8 @@ else:
         print(len(matches))
     else:
         print("none")
+
+# Example test commands in terminal:
+# ./scan_it.py
+# ./scan_it.py "the"
+# ./scan_it.py "the" "the quick brown fox jumps over the lazy dog"

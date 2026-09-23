@@ -9,3 +9,7 @@ else:
         print("Good job!")
     else:
         print("Nope, sorry...")
+
+# Example test commands in terminal:
+# ./parameter_matching.py
+# ./parameter_matching.py "Hello"
