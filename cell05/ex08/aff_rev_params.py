@@ -8,6 +8,6 @@ else:
         print(param)
 
 # Example test commands in terminal:
-# ./aff_rev_params.py
-# ./aff_rev_params.py "coucou"
-# ./aff_rev_params.py "Python" "piscine" "hello"
+# ./cell05/ex08/aff_rev_params.py
+# ./cell05/ex08/aff_rev_params.py "coucou"
+# ./cell05/ex08/aff_rev_params.py "Python" "piscine" "hello"

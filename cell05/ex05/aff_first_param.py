@@ -7,5 +7,5 @@ else:
     print("none")
 
 # Example test commands in terminal:
-# ./aff_first_param.py
-# ./aff_first_param.py "Code Ninja" "Numerique" "42"
+# ./cell05/ex05/aff_first_param.py
+# ./cell05/ex05/aff_first_param.py "Code Ninja" "Numerique" "42"

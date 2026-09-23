@@ -10,5 +10,5 @@ else:
         print(f"{p}: {len(p)}")
 
 # Example test commands in terminal:
-# ./count_it.py
-# ./count_it.py "Game" "of" "Thrones"
+# ./cell05/ex11/count_it.py
+# ./cell05/ex11/count_it.py "Game" "of" "Thrones"

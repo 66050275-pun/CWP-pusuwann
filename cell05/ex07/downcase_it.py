@@ -7,6 +7,6 @@ else:
     print("none")
 
 # Example test commands in terminal:
-# ./downcase_it.py
-# ./downcase_it.py "LUCIOLE"
-# ./downcase_it.py "This exercise is quite easy! "
+# ./cell05/ex07/downcase_it.py
+# ./cell05/ex07/downcase_it.py "LUCIOLE"
+# ./cell05/ex07/downcase_it.py "This exercise is quite easy! "

@@ -11,5 +11,5 @@ else:
         print("Nope, sorry...")
 
 # Example test commands in terminal:
-# ./parameter_matching.py
-# ./parameter_matching.py "Hello"
+# ./cell05/ex10/parameter_matching.py
+# ./cell05/ex10/parameter_matching.py "Hello"

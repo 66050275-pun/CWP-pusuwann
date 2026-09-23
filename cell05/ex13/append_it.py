@@ -9,5 +9,5 @@ else:
             print(f"{param}ism")
 
 # Example test commands in terminal:
-# ./append_it.py
-# ./append_it.py "parallel" "egoism" "human"
+# ./cell05/ex13/append_it.py
+# ./cell05/ex13/append_it.py "parallel" "egoism" "human"

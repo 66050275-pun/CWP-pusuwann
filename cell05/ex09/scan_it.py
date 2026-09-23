@@ -12,6 +12,6 @@ else:
         print("none")
 
 # Example test commands in terminal:
-# ./scan_it.py
-# ./scan_it.py "the"
-# ./scan_it.py "the" "the quick brown fox jumps over the lazy dog"
+# ./cell05/ex09/scan_it.py
+# ./cell05/ex09/scan_it.py "the"
+# ./cell05/ex09/scan_it.py "the" "the quick brown fox jumps over the lazy dog"
