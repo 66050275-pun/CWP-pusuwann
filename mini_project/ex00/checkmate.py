@@ -1,93 +1,109 @@
 #!/usr/bin/env python3
 
+def print_grid(grid):
+    """ฟังก์ชันช่วยพิมพ์กระดาน 2D List ให้มีรูปแบบสวยงามเหมือนในรูป"""
+    print("[", end="")
+    for i, row in enumerate(grid):
+        if i == 0:
+            print(f"{row},")
+        elif i == len(grid) - 1:
+            print(f" {row}]")
+        else:
+            print(f" {row},")
+
 def checkmate(board):
     # ตรวจสอบว่ามีข้อมูลส่งเข้ามาและเป็นสตริงหรือไม่
     if not board or not isinstance(board, str):
         return
 
-    # แยกกระดานออกเป็นแต่ละแถว (ตัดบรรทัดว่างออก)
-    lines = [line for line in board.splitlines() if len(line) > 0]
+    # แยกกระดานออกเป็นแต่ละแถว
+    lines = [line.strip() for line in board.splitlines() if line.strip()]
     if not lines:
         return
 
-    # ตรวจสอบขนาดของกระดานว่าต้องเป็นสี่เหลี่ยมจัตุรัส (กว้าง x ยาว เท่ากัน)
     size = len(lines)
+    # ตรวจสอบขนาดกระดานว่าต้องเป็นสี่เหลี่ยมจัตุรัส (ความกว้าง = ความยาว)
     for row in lines:
         if len(row) != size:
             return
 
-    # ค้นหาตำแหน่งของ King ('K') บนกระดาน
+    # ค้นหาตำแหน่งของ King ('K')
     king_pos = None
     for r in range(size):
         for c in range(size):
             if lines[r][c] == 'K':
-                # หากเจอกษัตริย์มากกว่า 1 ตัว ถือว่ากระดานไม่ถูกต้อง
                 if king_pos is not None:
-                    return
+                    return  # มี King มากกว่า 1 ตัว ถือว่ากระดานไม่ถูกต้อง
                 king_pos = (r, c)
 
-    # หากไม่พบกษัตริย์เลย
     if king_pos is None:
-        return
+        return  # ไม่พบ King
 
     kr, kc = king_pos
 
-    # ---------------------------------------------------------
-    # 1. ตรวจสอบการโจมตีจากเบี้ย (Pawn: 'P')
-    # ตามโจทย์ เบี้ยจะกินเฉียงขึ้นข้างบน 1 ช่อง (row - 1)
-    # ดังนั้น ตัวที่จะกิน King ได้ จะต้องอยู่แถวล่างลงไป 1 แถว (kr + 1)
-    # ---------------------------------------------------------
-    pawn_row = kr + 1
-    if pawn_row < size:
-        # เบี้ยต้องอยู่คอลัมน์ซ้าย (kc - 1) หรือขวา (kc + 1)
-        for pawn_col in (kc - 1, kc + 1):
-            if 0 <= pawn_col < size:
-                if lines[pawn_row][pawn_col] == 'P':
-                    print("Success")
-                    return
+    # 1. แสดงกระดานเริ่มต้นแบบ 2D List
+    grid = [list(row) for row in lines]
+    print_grid(grid)
 
-    # ---------------------------------------------------------
-    # 2. ตรวจสอบแนวนอนและแนวตั้ง (เรือ: 'R' หรือ ควีน: 'Q')
-    # เดินตรวจ 4 ทิศทาง: ขึ้น (-1, 0), ลง (1, 0), ซ้าย (0, -1), ขวา (0, 1)
-    # ---------------------------------------------------------
-    orthogonal_directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-    for dr, dc in orthogonal_directions:
-        r = kr + dr
-        c = kc + dc
-        # เดินทีละช่องไปเรื่อยๆ จนกว่าจะสุดขอบกระดาน
-        while 0 <= r < size and 0 <= c < size:
+    # 2. แสดงขนาดกระดาน (แถว, หลัก)
+    print(f"({size}, {size})")
+
+    # 3. คำนวณ Check Range (กระดานจำลองแสดงพื้นที่ที่หมากศัตรูสามารถโจมตีได้)
+    check_board = [list(row) for row in lines]
+
+    def mark_attack(r, c):
+        # เปลี่ยนเป็น 'X' เฉพาะช่องว่าง ('.') หรือช่องที่เป็น King ('K')
+        # จะไม่ทับหมากตัวอื่น เพื่อให้เห็นหมากศัตรูเดิม
+        if check_board[r][c] in ('.', 'K'):
+            check_board[r][c] = 'X'
+
+    for r in range(size):
+        for c in range(size):
             piece = lines[r][c]
-            # ถ้าเจอ R หรือ Q แสดงว่า King โดนโจมตี
+
+            # --------------------------------------------------
+            # เบี้ย (Pawn: 'P'): โจมตีเฉียงขึ้น 1 ช่อง (r - 1)
+            # --------------------------------------------------
+            if piece == 'P':
+                p_row = r - 1
+                for p_col in (c - 1, c + 1):
+                    if 0 <= p_row < size and 0 <= p_col < size:
+                        mark_attack(p_row, p_col)
+
+            # --------------------------------------------------
+            # เรือ (Rook: 'R') หรือ ควีน (Queen: 'Q'): โจมตี 4 ทิศ (ขึ้น, ลง, ซ้าย, ขวา)
+            # --------------------------------------------------
             if piece in ('R', 'Q'):
-                print("Success")
-                return
-            # ถ้าเจอหมากตัวอื่น (P, B, K) ขวางทางไว้ ให้หยุดตรวจทิศนี้
-            elif piece in ('P', 'B', 'K'):
-                break
-            # ถ้าเป็นช่องว่าง ('.') ให้เดินต่อไป
-            r += dr
-            c += dc
+                for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                    cr, cc = r + dr, c + dc
+                    while 0 <= cr < size and 0 <= cc < size:
+                        mark_attack(cr, cc)
+                        # หากเจอหมากตัวอื่นขวางทางไว้ ให้หยุดเดินในทิศนี้
+                        if lines[cr][cc] in ('P', 'B', 'R', 'Q', 'K'):
+                            break
+                        cr += dr
+                        cc += dc
 
-    # ---------------------------------------------------------
-    # 3. ตรวจสอบแนวทแยง (บิชอป: 'B' หรือ ควีน: 'Q')
-    # เดินตรวจ 4 ทิศทางทแยง: ทแยงซ้ายบน, ทแยงขวาบน, ทแยงซ้ายล่าง, ทแยงขวาล่าง
-    # ---------------------------------------------------------
-    diagonal_directions = [(-1, -1), (-1, 1), (1, -1), (1, 1)]
-    for dr, dc in diagonal_directions:
-        r = kr + dr
-        c = kc + dc
-        while 0 <= r < size and 0 <= c < size:
-            piece = lines[r][c]
-            # ถ้าเจอ B หรือ Q แสดงว่า King โดนโจมตี
+            # --------------------------------------------------
+            # บิชอป (Bishop: 'B') หรือ ควีน (Queen: 'Q'): โจมตี 4 ทิศแนวทแยง
+            # --------------------------------------------------
             if piece in ('B', 'Q'):
-                print("Success")
-                return
-            # ถ้าเจอหมากตัวอื่น (P, R, K) ขวางทางไว้ ให้หยุดตรวจทิศนี้
-            elif piece in ('P', 'R', 'K'):
-                break
-            # ถ้าเป็นช่องว่าง ('.') ให้เดินต่อไป
-            r += dr
-            c += dc
+                for dr, dc in [(-1, -1), (-1, 1), (1, -1), (1, 1)]:
+                    cr, cc = r + dr, c + dc
+                    while 0 <= cr < size and 0 <= cc < size:
+                        mark_attack(cr, cc)
+                        # หากเจอหมากตัวอื่นขวางทางไว้ ให้หยุดเดินในทิศนี้
+                        if lines[cr][cc] in ('P', 'B', 'R', 'Q', 'K'):
+                            break
+                        cr += dr
+                        cc += dc
 
-    # หากตรวจครบทุกทิศทางแล้ว ไม่มีหมากตัวใดโจมตี King ได้เลย
-    print("Fail")
+    # 4. แสดง Check Range
+    print("Check Range:")
+    print_grid(check_board)
+
+    # 5. สรุปผล: ถ้าตำแหน่งของ King ('K') ถูกเปลี่ยนเป็น 'X' แสดงว่าโดนรุก!
+    if check_board[kr][kc] == 'X':
+        print("Success")
+    else:
+        print("Fail")
